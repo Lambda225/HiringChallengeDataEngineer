@@ -1,6 +1,8 @@
 import os
 from dotenv import load_dotenv
 from pymongo import MongoClient
+from datetime import datetime
+from collections import defaultdict
 import requests
 
 load_dotenv()
@@ -18,6 +20,22 @@ def getdata():
     else:
         raise Exception("Désoler les données ne sont pas accéssible")
 
+def averagecalculation(data):
+
+    daily_sums = defaultdict(int)
+    daily_counts = defaultdict(int)
+
+    for record in data:
+        date = datetime.strptime(record['timestamp'], '%Y-%m-%d %H:%M:%S').date()
+        daily_sums[date] += record['CO']
+        daily_counts[date] += 1
+
+    daily_means = {date: daily_sums[date] / daily_counts[date] for date in daily_sums}
+    
+    for date, mean in daily_means.items():
+        print(f"{date}: {mean}")
+
+
 def savedata(data):
     try:
         client = MongoClient(db_url)
@@ -30,5 +48,5 @@ def savedata(data):
     
 data = getdata()
 
-savedata(data)
+averagecalculation(data)
 
