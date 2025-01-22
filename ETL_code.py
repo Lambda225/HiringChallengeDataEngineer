@@ -1,8 +1,6 @@
 import os
 from dotenv import load_dotenv
 from pymongo import MongoClient
-from datetime import datetime
-from collections import defaultdict
 from rich.console import Console
 import pandas as pd
 import requests
@@ -11,12 +9,12 @@ load_dotenv()
 
 console = Console()
 
-ids = os.getenv('STATION_ID')
-id = ids.split(',')[0]
-url = f"https://airqino-api.magentalab.it/v3/getStationHourlyAvg/{id}"
+station_id = os.getenv('STATION_ID').split(',')
+
+url = "https://airqino-api.magentalab.it/v3/getStationHourlyAvg/{}"
 db_url = f"mongodb+srv://{os.getenv('DB_USER')}:{os.getenv('DB_PASSWORD')}@cluster0.ctpns.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
 
-def getdata():
+def getdata(url):
     response = requests.get(url)
     if response.status_code == 200:
         console.log('Collecte de donnée éffectué')
@@ -36,11 +34,8 @@ def averagecalculation(data,sensor_id):
     return result
 
 
-def savedata(data):
+def savedata(data,client):
     try:
-        client = MongoClient(db_url)
-        console.log('connection de la BD éffectué')
-
         db = client["airquality"]
         collection = db["sensor"]
         insertion_result = collection.insert_one(data["header"])
@@ -56,11 +51,17 @@ def savedata(data):
         collection.insert_many(sensordata)
         console.log('Sauvegarde de donnée relevé par heure éffectué')
     except:
-        print("Une erreur s'est produit lors de la connection a la BD")
+        print("Une erreur s'est produit lors de l'insertion d'une donnée")
 
 
 
-with console.status("[bold green]Exécution des taches...") as status:   
-    data = getdata()
-    savedata(data)
+with console.status("[bold green]Exécution des taches...") as status: 
 
+    client = MongoClient(db_url)
+    console.log('connection de la BD éffectué')
+    
+    for id in station_id:
+        console.log(f"Opération sur la station {id}")
+        url = url.format(id)
+        json_responce = getdata(url)
+        savedata(json_responce,client)
