@@ -26,10 +26,11 @@ def getdata(url):
 def averagecalculation(data,sensor_id):
     df = pd.DataFrame(data)
     df['timestamp'] = pd.to_datetime(df['timestamp'])
-    df['date'] = df['timestamp'].dt.date
-    daily_means = df.groupby('date', as_index=False)[['CO', 'PM2.5']].mean()
-    daily_means['date'] = daily_means['date'].astype(str)
+    df['t_created'] = df['timestamp'].dt.date
+    daily_means = df.groupby('t_created', as_index=False)[['CO', 'PM2.5']].mean()
+    daily_means['t_created'] = daily_means['t_created'].astype(str)
     daily_means['sensor_id'] = sensor_id
+    daily_means = daily_means.rename(columns={'PM2.5': 'PM2_5'})
     result = daily_means.to_dict(orient='records')
     return result
 
@@ -39,7 +40,7 @@ def savedata(data,client):
         db = client["airquality"]
         collection = db["sensor"]
         insertion_result = collection.insert_one(data["header"])
-        console.log('Sauvegarde de donnée du capter éffectué')
+        console.log('Sauvegarde de donnée du capteur éffectué')
 
         meanday = averagecalculation(data["data"], insertion_result.inserted_id)
         collection = db["meanday"]
@@ -47,6 +48,14 @@ def savedata(data,client):
         console.log('Sauvegarde de moyenne CO et PM2.5 par jour éffectué')
 
         collection = db["sensordata"]
+        key_mapping = {
+            'timestamp': 't_created',
+            'T. int.': 'T_int',
+            'PM2.5':'PM2_5'
+        }
+        data["data"] = [
+            {key_mapping.get(k, k): v for k, v in record.items()} for record in data["data"]
+        ]
         sensordata = [{**record, 'sensor_id': insertion_result.inserted_id} for record in data["data"]]
         collection.insert_many(sensordata)
         console.log('Sauvegarde de donnée relevé par heure éffectué')
@@ -62,6 +71,5 @@ with console.status("[bold green]Exécution des taches...") as status:
     
     for id in station_id:
         console.log(f"Opération sur la station {id}")
-        url = url.format(id)
-        json_responce = getdata(url)
+        json_responce = getdata(f"https://airqino-api.magentalab.it/v3/getStationHourlyAvg/{id}")
         savedata(json_responce,client)

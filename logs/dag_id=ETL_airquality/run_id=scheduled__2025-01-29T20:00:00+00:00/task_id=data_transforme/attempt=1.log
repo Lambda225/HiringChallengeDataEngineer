@@ -1,0 +1,25 @@
+[2025-01-29T21:00:34.663+0000] {local_task_job_runner.py:123} INFO - ::group::Pre task execution logs
+[2025-01-29T21:00:34.670+0000] {taskinstance.py:2613} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: ETL_airquality.data_transforme scheduled__2025-01-29T20:00:00+00:00 [queued]>
+[2025-01-29T21:00:34.675+0000] {taskinstance.py:2613} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: ETL_airquality.data_transforme scheduled__2025-01-29T20:00:00+00:00 [queued]>
+[2025-01-29T21:00:34.675+0000] {taskinstance.py:2866} INFO - Starting attempt 1 of 3
+[2025-01-29T21:00:34.689+0000] {taskinstance.py:2889} INFO - Executing <Task(_PythonDecoratedOperator): data_transforme> on 2025-01-29 20:00:00+00:00
+[2025-01-29T21:00:34.694+0000] {standard_task_runner.py:72} INFO - Started process 30660 to run task
+[2025-01-29T21:00:34.697+0000] {standard_task_runner.py:104} INFO - Running: ['airflow', 'tasks', 'run', 'ETL_airquality', 'data_transforme', 'scheduled__2025-01-29T20:00:00+00:00', '--job-id', '13', '--raw', '--subdir', 'DAGS_FOLDER/ETL_airquality.py', '--cfg-path', '/tmp/tmp2c5b_u3t']
+[2025-01-29T21:00:34.698+0000] {standard_task_runner.py:105} INFO - Job 13: Subtask data_transforme
+[2025-01-29T21:00:34.731+0000] {task_command.py:467} INFO - Running <TaskInstance: ETL_airquality.data_transforme scheduled__2025-01-29T20:00:00+00:00 [running]> on host antonio-Vostro-3580
+[2025-01-29T21:00:35.174+0000] {taskinstance.py:3132} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='airflow' AIRFLOW_CTX_DAG_ID='ETL_airquality' AIRFLOW_CTX_TASK_ID='data_transforme' AIRFLOW_CTX_EXECUTION_DATE='2025-01-29T20:00:00+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='scheduled__2025-01-29T20:00:00+00:00'
+[2025-01-29T21:00:35.175+0000] {logging_mixin.py:190} INFO - Task instance is in running state
+[2025-01-29T21:00:35.175+0000] {logging_mixin.py:190} INFO -  Previous state of the Task instance: queued
+[2025-01-29T21:00:35.175+0000] {logging_mixin.py:190} INFO - Current task name:data_transforme state:running start_date:2025-01-29 21:00:34.671118+00:00
+[2025-01-29T21:00:35.175+0000] {logging_mixin.py:190} INFO - Dag name:ETL_airquality and current dag run status:running
+[2025-01-29T21:00:35.175+0000] {taskinstance.py:731} INFO - ::endgroup::
+[2025-01-29T21:00:35.176+0000] {python.py:240} INFO - Done. Returned value was: [{'header': {'station_name': 'SMART188', 'station_lat': 5.369390964508057, 'station_lon': -3.9589128494262695}, 'data': {'t_created': '2025-01-29 20:00:00', 'CO': 0.0, 'T': 28.66, 'T_int': 390.73334, 'NO2': 21.527624, 'O3': 17.250036, 'PM10': 13.033334, 'PM2_5': 5.133333, 'RH': 90.19334, 'date_converted': datetime.datetime(2025, 1, 29, 20, 0)}}, {'header': {'station_name': 'SMART189', 'station_lat': 5.365312576293945, 'station_lon': -3.9578092098236084}, 'data': {'t_created': '2025-01-29 20:00:00', 'CO': 0.36598998, 'T': 28.51, 'T_int': 401.5, 'NO2': 19.732239, 'O3': 26.31702, 'PM10': 31.0, 'PM2_5': 18.233334, 'RH': 88.48334, 'date_converted': datetime.datetime(2025, 1, 29, 20, 0)}}]
+[2025-01-29T21:00:35.193+0000] {taskinstance.py:340} INFO - ::group::Post task execution logs
+[2025-01-29T21:00:35.193+0000] {taskinstance.py:352} INFO - Marking task as SUCCESS. dag_id=ETL_airquality, task_id=data_transforme, run_id=scheduled__2025-01-29T20:00:00+00:00, execution_date=20250129T200000, start_date=20250129T210034, end_date=20250129T210035
+[2025-01-29T21:00:35.202+0000] {logging_mixin.py:190} INFO - Task instance in success state
+[2025-01-29T21:00:35.203+0000] {logging_mixin.py:190} INFO -  Previous state of the Task instance: running
+[2025-01-29T21:00:35.203+0000] {logging_mixin.py:190} INFO - Dag name:ETL_airquality queued_at:2025-01-29 21:00:01.790904+00:00
+[2025-01-29T21:00:35.203+0000] {logging_mixin.py:190} INFO - Task hostname:antonio-Vostro-3580 operator:_PythonDecoratedOperator
+[2025-01-29T21:00:35.231+0000] {local_task_job_runner.py:266} INFO - Task exited with return code 0
+[2025-01-29T21:00:35.248+0000] {taskinstance.py:3895} INFO - 1 downstream tasks scheduled from follow-on schedule check
+[2025-01-29T21:00:35.254+0000] {local_task_job_runner.py:245} INFO - ::endgroup::

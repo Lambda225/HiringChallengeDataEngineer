@@ -29,3 +29,7 @@ WTF_CSRF_TIME_LIMIT = 60 * 60 * 24 * 365
 # Set this API key to enable Mapbox visualizations
 MAPBOX_API_KEY = ''
 SESSION_PROTECTION = "basic"
+APP_NAME = "DATA354 Hiring Challenge"
+APP_ICON = "/static/assets/images/data354/icon_data354.png"
+LOGO_TARGET = "/"
+FAVICONS = [{"href":"/static/assets/images/data354/favicon.jpeg"}]
