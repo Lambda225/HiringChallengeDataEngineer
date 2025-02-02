@@ -1,6 +1,6 @@
 !bin/bash
-export SUPERSET_CONFIG_PATH=~/Documents/HiringChallengeDataEngineer/superset_config.py
-. ~/Documents/HiringChallengeDataEngineer/.venv/bin/activate
+export SUPERSET_CONFIG_PATH=~/HiringChallengeDataEngineer/superset_config.py
+. ~/HiringChallengeDataEngineer/.venv/bin/activate
 gunicorn \
   -w 10 \
       -k gevent \

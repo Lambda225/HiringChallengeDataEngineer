@@ -1,9 +1,10 @@
 .venv
 .env
-/logs
-./airflow.db
-./airflow.cfg
-./superset.db
+logs/
+airflow.db
+airflow.cfg
+superset.db
 superset.db-journal
-__pycache__*
+__pycache__/
+dags/__pycache__/
 webserver_config.py
