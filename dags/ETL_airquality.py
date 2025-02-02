@@ -25,7 +25,7 @@ def averagecalculation(data):
         result = [item for item in result if item['t_created'] != today_str]
     return result
 
-db_url = f"mongodb+srv://{os.getenv('DB_USER')}:{os.getenv('DB_PASSWORD')}@cluster0.ctpns.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+db_url = os.getenv('DB_URL')
 
 default_value = {
     "ower":'parfait',
