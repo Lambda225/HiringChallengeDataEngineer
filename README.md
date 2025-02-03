@@ -23,90 +23,118 @@ Les données collectées sont ensuite accessibles via **Apache Drill**, offrant 
 
 **NB :** _Avant de poursuivre, il est important de noter que toutes les opérations ont été réalisées sur un système Linux. Si vous utilisez un autre système d'exploitation, vous devrez adapter les commandes en conséquence. Assurez-vous d'avoir déjà installé **MongoDB**, **Python** et **Java**._
 
-1. **Clone le projet et accède** :
+---
+
+1. **Cloner le Projet et Accéder au Répertoire** :
    ```sh
    git clone https://github.com/Lambda225/HiringChallengeDataEngineer.git
    cd HiringChallengeDataEngineer
    ```
-2. **Crée un environnement virtul et activation**
+2. **Créer et Activer un Environnement Virtuel**
 
    ```sh
     python3 -m venv .venv
     source .venv/bin/activate
    ```
 
-3. **Installe les dépandance python**
+3. **Installer les Dépendances Python**
    ```sh
    pip install -r requirements.txt
    ```
-4. **Définit les variables d'environnement**
+4. **Définir les Variables d'Environnement**
 
-   créer une fichier nommé `.env` a la racine du repectoire et ajouter les variables suvantes en modifiant les valeurs:
+   Créez un fichier nommé .env à la racine du répertoire et ajoutez-y les variables suivantes en modifiant leurs valeurs :
 
    ```.env
    STATION_ID = keyStation1,keyStation1
    DB_URL = yourDataBaseUrl
    ```
 
-5. **lance apache Airflow et excecute le dag**
+5. **Lancer Apache Airflow et Exécuter le DAG**
+
+   Définissez la variable d'environnement AIRFLOW_HOME :
 
    ```sh
    export AIRFLOW_HOME=projectPath
+   ```
+
+   Initialisez la base de données d'Airflow et créez un utilisateur administrateur :
+
+   ```sh
    airflow db init
    airflow users create --username admin --firstname firstname --lastname lastname --role Admin --email admin@domain.com
    ```
 
-   après ses étapes vous serez amené a entrer un mots de passe.Juste après cela veiller exécuter ses commande
+   Après avoir entré le mot de passe, démarrez Airflow en mode autonome :
 
    ```sh
    airflow standalone
    ```
 
-   accédez a l'addresse http://localhost:8080 pour vous connecté a airflow et activé le dag _ETL_airquality_
+   Accédez ensuite à http://localhost:8080 pour vous connecter à Airflow et activer le DAG _ETL_airquality_.
 
-   **NB** : _Avant cela assurer vous aurez vous que mongoDB est lancé_
+   **NB** : _Assurez-vous que MongoDB est bien lancé avant de démarrer Airflow._
 
    ![activation du dag](./image/active_dag.png)
 
-6. **Connect mongoDB a apache Drill**
+6. **Connecter MongoDB à Apache Drill**
+   Lancez Apache Drill
 
    ```sh
    ./apache-drill-1.21.2/bin/drill-embedded
    ```
 
-   accédez a l'addresse http://localhost:8047 puis allez dans storage. Ensuite clické sur enable en face de mongo. Allez dans query entrer les codes suivant pour vous assurer que la connection a été éffectuer
+   Ensuite, accédez à http://localhost:8047, allez dans Storage, puis cliquez sur Enable en face de mongo.
 
-   ![activation du connecteur](./image/active_drill_connector.png)
+   Dans l'onglet Query, exécutez la requête suivante pour vérifier que la connexion est bien établie :
 
    ```sql
    SELECT * FROM mongo.airquality.sensor
    ```
 
-   **NB :** Vous pouvez toujours modier url de connection si celui par défault ne correspond pas
+   **NB :** Vous pouvez modifier l'URL de connexion si celle par défaut ne correspond pas à votre configuration.
 
-7. **Visualise avec Apache Superset**
+   ![activation du connecteur](./image/active_drill_connector.png)
+
+7. **Visualiser les Données avec Apache Superset**
+
+   Définissez les variables d'environnement pour Superset :
 
    ```sh
    export FLASK_APP=superset
    export SUPERSET_CONFIG_PATH=yourProjectPath/superset_config.py
+   ```
+
+   Modifiez la variable `SQLALCHEMY_DATABASE_URI` dans `superset_config.py` pour lui indiquer le chemin correct, puis exécutez les commandes suivantes :
+
+   ```sh
    superset db upgrade
    superset fab create-admin
    ```
 
-   après ses étapes vous serais amenez a créer votre utilisateur superset
+   Après ces étapes, vous serez invité à créer votre utilisateur Superset.
 
    ```sh
    superset init
    ```
 
-   rajouter le chemain vers le fichier `activate` de votre environement virtule à la troisème ligne du fichier `run_superset.sh`
+   Enfin, lancez Apache Superset :
 
    ```sh
-   ./run_superset
+   superset run -p 8088 --with-threads --reload --debugger
    ```
 
-   rendez-vous à l'addresse http://localhost:8088
-   pour accéder à apache superset
+   Accédez à http://localhost:8088, puis allez dans l'onglet **Dashboards** et importez le fichier `dashboard_export_20250202T221928.zip`.
+
+   **OPTIONNEL : Personnalisation du Dashboard**
+
+   Pour personnaliser le dashboard, déplacez le dossier `data354` dans :
+
+   ```sh
+   .venv/lib/python3.10/site-packages/superset/static/assets/images
+   ```
+
+   Ensuite, décommentez les trois dernières lignes du fichier `superset_config.py`.
 
 ## ⏳ Comment Apache Airflow récupère les données chaque heure ?
 

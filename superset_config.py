@@ -17,7 +17,7 @@ SECRET_KEY = 'Q3dbbiCUWqOtNLQE+68484K2IntD1bwjKBNNwfDLdK4Z6VX0m0pQ56+b'
 # you want to explore are managed directly in the web UI
 # The check_same_thread=false property ensures the sqlite client does not attempt
 # to enforce single-threaded access, which may be problematic in some edge cases
-SQLALCHEMY_DATABASE_URI = 'sqlite:////home/antonio/Documents/HiringChallengeDataEngineer/superset.db?check_same_thread=false'
+SQLALCHEMY_DATABASE_URI = 'sqlite:////home/antonio/HiringChallengeDataEngineer/superset.db?check_same_thread=false'
 
 # Flask-WTF flag for CSRF
 WTF_CSRF_ENABLED = True
